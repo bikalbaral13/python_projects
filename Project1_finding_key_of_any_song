@@ -1,0 +1,16 @@
+!pip install yt-dlp
+import yt_dlp
+
+def download_only_audio(url):
+    ydl_opts = {
+        'format': 'bestaudio',            # Best available audio format
+        'outtmpl': '%(title)s.%(ext)s',    # Save with video title
+        'keepvideo': False,                # Do not keep any video part
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+
+if __name__ == "__main__":
+    youtube_url = input("Enter the YouTube URL: ")
+    download_only_audio(youtube_url)
