@@ -1,0 +1,34 @@
+#Project 1 : Downloading Youtube Audio from url
+!pip install yt-dlp
+import yt_dlp
+
+def download_youtube_audio(youtube_url):
+    """
+    Download audio from a YouTube video and save it as an MP3 file.
+    """
+    # Setup to automatically extract the title and use it as the output filename
+    ydl_opts = {
+        'format': 'bestaudio/best',  # Choose the best audio format
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',  # Convert to audio
+            'preferredcodec': 'mp3',      # Save as MP3
+            'preferredquality': '192',    # Set the quality to 192kbps
+        }],
+        'outtmpl': '%(title)s.%(ext)s',  # Use the video title as the filename
+        'noplaylist': True,              # Avoid downloading entire playlists
+    }
+
+    # Create a yt-dlp object and download the audio
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info_dict = ydl.extract_info(youtube_url, download=False)
+        output_path = info_dict.get('title', 'audio')  # Use video title for filename
+
+    # Now, download the audio
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([youtube_url])
+   
+    return f"Audio downloaded to {output_path}.mp3"
+
+# Take input URL from the user
+video_url = input("Enter the YouTube video URL: ")
+print(download_youtube_audio(video_url))
